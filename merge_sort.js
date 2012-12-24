@@ -1,5 +1,3 @@
-<script type="text/javascript">
-	
 function merge_sort(arr) {
 	// primeste un array si returneaza un array sortat
 	var l = arr.length;
@@ -42,5 +40,3 @@ function merge(left, right) {
 
 var result = merge_sort([4,5,2,3,0,14,34]);
 console.log(result);
-
-</script>
