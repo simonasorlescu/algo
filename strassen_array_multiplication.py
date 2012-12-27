@@ -16,17 +16,59 @@ def op (x, y, op = '+'):
         out.append(line)
     return out
 
+
 def add (x, y):
     """
         Adds two square arrays.
     """
     return op(x, y, '+')
 
+
 def sub (x, y):
     """
         Subtracts two square arrays.
     """
     return op(x, y, '-')
+
+
+def arr_section (x, m, n, o, p):
+    """
+        Method extracts an array section of the original array x, denoted by
+        lines m through n and columns o through p.
+    """
+    out = []
+    for i in range(m, n):
+        line = []
+        for j in range(o, p):
+            line.append(x[i][j])
+        out.append(line)
+    return out
+
+
+def arr_join (a, b, c, d):
+    """
+        Recomposes an array from for four equal-sized section arrays as follows:
+        x = (a b)
+            (c d)
+    """
+    out = []
+    n = len(a)
+    for i in range(n):
+        line = []
+        for j in range(n):
+            line.append(a[i][j])
+        for j in range(n):
+            line.append(b[i][j])
+        out.append(line)
+    for i in range(n):
+        line = []
+        for j in range(n):
+            line.append(c[i][j])
+        for j in range(n):
+            line.append(d[i][j])
+        out.append(line)
+    return out
+
 
 def strassen_array_multiplication (x, y):
     """
@@ -80,14 +122,14 @@ def strassen_array_multiplication (x, y):
 
     else:
         m = int(n/2)
-        a = x[0:m][0:m]
-        b = x[0:m][m+1:n]
-        c = x[m+1:n][0:m]
-        d = x[m+1:n][m+1:n]
-        e = y[0:m][0:m]
-        f = y[0:m][m+1:n]
-        g = y[m+1:n][0:m]
-        h = y[m+1:n][m+1:n]
+        a = arr_section(x, 0, m, 0, m)
+        b = arr_section(x, 0, m, m, n)
+        c = arr_section(x, m, n, 0, m)
+        d = arr_section(x, m, n, m, n)
+        e = arr_section(y, 0, m, 0, m)
+        f = arr_section(y, 0, m, m, n)
+        g = arr_section(y, m, n, 0, m)
+        h = arr_section(y, m, n, m, n)
 
         p1 = strassen_array_multiplication(a, sub(f, h))
         p2 = strassen_array_multiplication(add(a, b), h)
@@ -102,16 +144,23 @@ def strassen_array_multiplication (x, y):
         cedg = add(p3, p4)
         cfdh = sub(sub(add(p1, p5), p3), p7)
 
-        return [
-            [aebg, afbh],
-            [cedg, cfdh]
-        ]
+        out = arr_join(aebg, afbh, cedg, cfdh)
+        import pdb; pdb.set_trace()
+        return out
 
 
 # Test
 #x = [[1,2], [3,4]]
 #y = [[5,6], [7,8]]
 #print strassen_array_multiplication(x, y)
+#print add(x, y)
+#print sub(x, y)
+#print arr_section(x, 1, 2, 1, 2)
+#a = [[1]]
+#b = [[2]]
+#c = [[3]]
+#d = [[4]]
+#print arr_join(a,b,c,d)
 
 x = [
     [1,2,3,4],
