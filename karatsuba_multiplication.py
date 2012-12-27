@@ -1,30 +1,51 @@
 from math import ceil, floor
 
+def to_int (x, default=10):
+    """
+        Function takes a string as argument and returns a number.
+        Except for the string '0' which will return 10.
+    """
+    if x is '0':
+        return default
+    return int(x)
+
+
 def multiply (x, y):
     """
-        Multiplies x and y recursively by splitting it in two
+        Multiplies x and y recursively by splitting both terms in two number.
+        @param {Int} x, x positive non-zero integer
+        @param {Int} y, y positive non-zero integer
+        @return {Int}
     """
-    sx = str(x)
-    sy = str(y)
-    n = len(sx)
-    m = len(sy)
-    x = int(x)
-    y = int(y)
+    # Make sure they're both strings.
+    x = str(x)
+    y = str(y)
+
+    # Calculate length of numbers.
+    n = len(x)
+    m = len(y)
 
     if n is 1 or m is 1:
-        if x is 0: x = 10
-        if y is 0: y = 10
-        return x*y
+        return to_int(x) * to_int(y)
     else:
-        a = int(sx[0:int(floor(n/2))])
-        b = int(sx[int(ceil(n/2)):n])
-        c = int(sy[0:int(floor(m/2))])
-        d = int(sy[int(ceil(m/2)):m])
+        # Compute segments of the initial numbers.
+        a = x[0:int(floor(n/2))]
+        b = x[int(ceil(n/2)):n]
+        c = y[0:int(floor(m/2))]
+        d = y[int(ceil(m/2)):m]
 
+        # Compute Karatsuba multiplication terms.
         ac = multiply(a, c)
         bd = multiply(b, d)
-        adbc = multiply(a+b, c+d) - ac - bd
-        return ac*(10**2) + adbc*10 + bd
+        ab = to_int(a) + to_int(b)
+        cd = to_int(c) + to_int(d)
+        adbc = multiply(ab, cd) - ac - bd
+
+        # Compute Karatsuba multiplication powers.
+        pow1 = int(ceil(n/2)) + int(ceil(m/2))
+        pow2 = max(int(floor(n/2)), int(floor(m/2)))
+
+        return ac*(10**pow1) + adbc*(10**pow2) + bd
 
 
 # Test
@@ -34,9 +55,9 @@ def multiply (x, y):
 #y = 13
 #print "%s * %s; actual %s; expected %s" % (x, y, multiply(x, y), x*y)
 
-x = 12
-y = 100
-print "%s * %s; actual %s; expected %s" % (x, y, multiply(x, y), x*y)
+#x = 12
+#y = 10
+#print "%s * %s; actual %s; expected %s" % (x, y, multiply(x, y), x*y)
 
 #x = 5678
 #y = 1234
